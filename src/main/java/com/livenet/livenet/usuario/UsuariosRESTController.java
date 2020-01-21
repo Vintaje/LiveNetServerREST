@@ -18,16 +18,6 @@ public class UsuariosRESTController {
     @Autowired
     private usuariosDAO usuarioDao;
 
-    // Función de TEST
-
-    //@GetMapping
-    @RequestMapping(value = "prueba", method = RequestMethod.GET)
-    public String hola() {
-        return "Esto es una prueba";
-    }
-
-    //*** Comenzado los servicios rest
-
 
 
 
@@ -55,7 +45,7 @@ public class UsuariosRESTController {
     }
 
 
-    @RequestMapping(value = "insertar_usuario", method = RequestMethod.POST)
+    @RequestMapping(value = "insertar_usuario", method = RequestMethod.GET)
     public ResponseEntity<Usuario> create(@RequestBody Usuario u) {
 
         Usuario p = usuarioDao.save(u);

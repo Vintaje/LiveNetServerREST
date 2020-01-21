@@ -7,5 +7,4 @@ public interface usuariosDAO extends JpaRepository<Usuario, Long> {
 
     Usuario findByAlias(String alias);
 
-
 }
