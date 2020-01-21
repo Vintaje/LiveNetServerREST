@@ -35,19 +35,6 @@ public class LocalizacionesRESTController {
 
     //*** Comenzado los servicios rest
 
-    /**
-     * Método de prueba con Productos
-     *
-     * @return
-     */
-
-    @RequestMapping(value = "test", method = RequestMethod.GET)
-    public ResponseEntity<Localizacion> getProducto() {
-        Localizacion p = new Localizacion("test", 45.6543f, 3.32456f, "fechahora");
-        // Devolvemos la localizacion
-        return ResponseEntity.ok(p);
-    }
-
 
     /**
      * Lista todos las localizaciones. Protocolo GET
@@ -144,9 +131,9 @@ public class LocalizacionesRESTController {
      * @return Producto actualizado
      */
     @RequestMapping(value = "localizaciones/{alias}", method = RequestMethod.PUT)
-    public ResponseEntity<Localizacion> update(@PathVariable("alias") Long alias, @RequestBody Localizacion localizacion) {
+    public ResponseEntity<Localizacion> update(@PathVariable("alias") String alias, @RequestBody Localizacion localizacion) {
         // Buscamos el localizacion por alias
-        Optional<Localizacion> op = pd.findById(alias);
+        Optional<Localizacion> op = Optional.ofNullable(pd.findByAlias(alias));
         // Devolvemos el localizacion si existe.
         if (op.isPresent()) {
             // Le pasamos los datos
