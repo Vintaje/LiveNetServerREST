@@ -69,9 +69,9 @@ public class UsuariosRESTController {
 
     @RequestMapping(value = "usuarios/{alias}", method = RequestMethod.PUT)
     public ResponseEntity<Usuario> update(@PathVariable("alias") String alias, @RequestBody Usuario u) {
-        // Buscamos el localizacion por alias
+        // Buscamos el usuario por alias
         Optional<Usuario> op = Optional.ofNullable(usuarioDao.findByAlias(alias));
-        // Devolvemos el localizacion si existe.
+        // Devolvemos el usuario si existe.
         if (op.isPresent()) {
             // Le pasamos los datos
             Usuario us = op.get();
