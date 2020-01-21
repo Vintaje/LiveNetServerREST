@@ -1,6 +1,8 @@
 package com.livenet.livenet.sesion;
 
 import com.livenet.livenet.localizacion.Localizacion;
+import com.livenet.livenet.usuario.Usuario;
+import com.livenet.livenet.usuario.usuariosDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,15 +11,16 @@ import javax.xml.ws.Response;
 import java.util.Optional;
 
 @RestController
-@RequestMapping
+@RequestMapping("/")
 public class SesionesRESTController {
 
     @Autowired
     private sesionesDAO pd;
+    private usuariosDAO ud;
 
     @RequestMapping(value="sesion/{alias}", method = RequestMethod.GET)
-    public ResponseEntity<Sesion> findByAlias(@PathVariable("alias") String alias){
-        Sesion s = pd.findByAlias(alias);
+    public ResponseEntity<Usuario> findByAlias(@PathVariable("alias") String alias){
+        Usuario s = ud.findByAlias(alias);
 
         if (s != null) {
             return ResponseEntity.ok(s);

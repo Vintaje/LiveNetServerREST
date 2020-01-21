@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface mensajesDAO extends JpaRepository<Mensaje, Long> {
 
-    List<Mensaje> findByDestino(String destino);
+    List<Mensaje> findAllByDestino(String destino);
 
 }

@@ -8,7 +8,7 @@ import javax.persistence.*;
 public class Mensaje {
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "remitente", nullable = false)
@@ -26,14 +26,45 @@ public class Mensaje {
     public Mensaje() {
     }
 
-    public Mensaje(int id, String remitente, String destino, String contenido, String fecha_hora){
-        this.id = id;
+    public Mensaje(String remitente, String destino, String contenido, String fecha_hora){
         this.remitente = remitente;
         this.destino = destino;
         this.contenido = contenido;
         this.fecha_hora = fecha_hora;
     }
 
+
+    public String getRemitente() {
+        return remitente;
+    }
+
+    public void setRemitente(String remitente) {
+        this.remitente = remitente;
+    }
+
+    public String getDestino() {
+        return destino;
+    }
+
+    public void setDestino(String destino) {
+        this.destino = destino;
+    }
+
+    public String getContenido() {
+        return contenido;
+    }
+
+    public void setContenido(String contenido) {
+        this.contenido = contenido;
+    }
+
+    public String getFecha_hora() {
+        return fecha_hora;
+    }
+
+    public void setFecha_hora(String fecha_hora) {
+        this.fecha_hora = fecha_hora;
+    }
 
     @Override
     public String toString() {

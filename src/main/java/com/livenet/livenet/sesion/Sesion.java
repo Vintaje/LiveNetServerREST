@@ -7,7 +7,10 @@ import javax.persistence.*;
 public class Sesion {
 
     @Id
-    @Column(name="alias",nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "alias", nullable = false,unique = true)
     private String alias;
 
     @Column(name = "token", nullable = false)

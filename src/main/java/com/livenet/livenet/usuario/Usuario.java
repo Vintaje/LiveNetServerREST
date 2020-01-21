@@ -1,9 +1,6 @@
 package com.livenet.livenet.usuario;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Clase pojo de usuario
@@ -15,7 +12,7 @@ import javax.persistence.Table;
 public class Usuario {
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "alias", nullable = false)

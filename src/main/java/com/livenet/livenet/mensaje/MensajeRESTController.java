@@ -1,6 +1,8 @@
 package com.livenet.livenet.mensaje;
 
 
+import com.livenet.livenet.usuario.Usuario;
+import com.livenet.livenet.usuario.usuariosDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,30 +10,42 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping
+@RequestMapping("/mensajes")
 public class MensajeRESTController {
 
 
     @Autowired
     private mensajesDAO pd;
+    private usuariosDAO ud;
 
 
-    @RequestMapping(value="mensajes/{destino}", method = RequestMethod.GET)
+    @RequestMapping(value="recibir/{destino}", method = RequestMethod.GET)
     public ResponseEntity<List<Mensaje>> findByDestino(@PathVariable("destino") String destino){
-        List<Mensaje> m = pd.findByDestino(destino);
+        List<Mensaje> m = pd.findAllByDestino(destino);
 
-        for(Mensaje ms : m){
-            pd.delete(ms);
+
+        if (m != null) {
+            for(Mensaje ms : m){
+                pd.delete(ms);
+
+            }
+            return ResponseEntity.ok(m);
+        } else {
+            return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(m);
 
     }
 
-    @RequestMapping(value="enviarmensaje",method = RequestMethod.POST)
+    @RequestMapping(value="enviar",method = RequestMethod.POST)
     public ResponseEntity<Mensaje> create(@RequestBody Mensaje mensaje){
-        Mensaje m = pd.save(mensaje);
+        Usuario us = ud.findByAlias(mensaje.getDestino());
 
-        return ResponseEntity.ok(m);
+        if(us != null) {
+            Mensaje m = pd.save(mensaje);
+
+            return ResponseEntity.ok(m);
+        }
+        return ResponseEntity.notFound().build();
     }
 
 }
