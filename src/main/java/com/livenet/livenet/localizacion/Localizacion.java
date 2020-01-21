@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Table(name = "localizaciones")
 public class Localizacion {
 
+    //Necesarios
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
