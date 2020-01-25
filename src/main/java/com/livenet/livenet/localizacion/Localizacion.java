@@ -1,6 +1,7 @@
 package com.livenet.livenet.localizacion;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Clase modelo de producto
@@ -9,7 +10,7 @@ import javax.persistence.*;
 // Le decimos a Spring que es una Entidad y la tabla.
 @Entity
 @Table(name = "localizaciones")
-public class Localizacion {
+public class Localizacion implements Serializable {
 
     @Id
     @Column(name = "alias", nullable = false)

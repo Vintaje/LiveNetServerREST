@@ -1,6 +1,7 @@
 package com.livenet.livenet.usuario;
 
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +15,8 @@ import java.util.Optional;
 public class UsuariosRESTController {
 
 
-
     @Autowired
     private usuariosDAO usuarioDao;
-
-
 
 
     @RequestMapping(value = "usuarios", method = RequestMethod.GET)
@@ -44,13 +42,35 @@ public class UsuariosRESTController {
 
     }
 
+    @RequestMapping(value = "usuarios/login", method = RequestMethod.POST)
+    public ResponseEntity<Usuario> findByAliasAndPasswd(@RequestBody LoginBody login) {
+        // Buscamos el usuario por alias
+        Usuario u = usuarioDao.findByAliasAndPasswd(login.getalias(), login.getpass());
+        if (u != null) {
+            return ResponseEntity.ok(u);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
 
-    @RequestMapping(value = "insertar_usuario", method = RequestMethod.GET)
+    }
+
+
+    @RequestMapping(value = "insertar_usuario", method = RequestMethod.POST)
     public ResponseEntity<Usuario> create(@RequestBody Usuario u) {
+        
+        try {
+            Usuario p = usuarioDao.save(u);
+            return ResponseEntity.ok(p);
 
-        Usuario p = usuarioDao.save(u);
+        } catch (ConstraintViolationException e) {
+            //correo ya existe
+            return ResponseEntity.status(303).build();
 
-        return ResponseEntity.ok(p);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.badRequest().build();
+
     }
 
     @RequestMapping(value = "usuarios/{alias}", method = RequestMethod.DELETE)
@@ -81,11 +101,6 @@ public class UsuariosRESTController {
             return ResponseEntity.noContent().build();
         }
     }
-
-
-
-
-
 
 
 }

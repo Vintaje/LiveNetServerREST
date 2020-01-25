@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * Clase pojo de usuario
@@ -12,7 +13,7 @@ import javax.persistence.Table;
 // Le decimos a Spring que es una Entidad y la tabla.
 @Entity
 @Table(name = "usuarios")
-public class Usuario {
+public class Usuario implements Serializable {
 
     @Id
     @Column(name = "id", nullable = false)
