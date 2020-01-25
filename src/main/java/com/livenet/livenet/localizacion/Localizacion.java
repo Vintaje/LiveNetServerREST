@@ -12,8 +12,12 @@ import java.io.Serializable;
 @Table(name = "localizaciones")
 public class Localizacion implements Serializable {
 
+    //Necesarios
     @Id
-    @Column(name = "alias", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "alias", nullable = false,unique = true)
     private String alias;
 
     @Column(name = "latitud", nullable = false)

@@ -93,7 +93,7 @@ public class LocalizacionesRESTController {
      * @param localizacion Producto a crear mendiante JSON
      * @return Producto creado si lo consigue
      */
-    @RequestMapping(value = "insertarloc", method = RequestMethod.POST)
+    @RequestMapping(value = "actualizarloc", method = RequestMethod.POST)
     public ResponseEntity<Localizacion> create(@RequestBody Localizacion localizacion) {
         // Creamos un nuevo localizacion a partir de los datos una vez insertado
         Localizacion p = pd.save(localizacion);
@@ -117,29 +117,6 @@ public class LocalizacionesRESTController {
             // Le pasamos los datos
             Localizacion p = op.get();
             pd.deleteById(alias);
-            return ResponseEntity.ok(p);
-        } else {
-            return ResponseEntity.noContent().build();
-        }
-    }
-
-    /**
-     * Actualiza un localizacion de la base de datos. Protocolo PUT
-     * PUT: http://localhost:8080/localizaciones/{alias}
-     *
-     * @param localizacion localizacion a actualizar
-     * @return Producto actualizado
-     */
-    @RequestMapping(value = "localizaciones/{alias}", method = RequestMethod.PUT)
-    public ResponseEntity<Localizacion> update(@PathVariable("alias") String alias, @RequestBody Localizacion localizacion) {
-        // Buscamos el localizacion por alias
-        Optional<Localizacion> op = Optional.ofNullable(pd.findByAlias(alias));
-        // Devolvemos el localizacion si existe.
-        if (op.isPresent()) {
-            // Le pasamos los datos
-            Localizacion p = op.get();
-            p.setLatitud(localizacion.getLatitud());
-            pd.save(p);
             return ResponseEntity.ok(p);
         } else {
             return ResponseEntity.noContent().build();
