@@ -30,24 +30,15 @@ public class Localizacion implements Serializable {
     @Column(name = "fecha_hora", nullable = false)
     private Date fechaHora;
 
-    @Column(name = "precision", nullable = false)
-    private float precision;
+    public Localizacion(){}
 
-
-    public Localizacion() {
-    }
-
-    public Localizacion(String alias, float latitud, float longitud, Date fechaHora, float precision) {
+    public Localizacion(String alias, float latitud, float longitud, Date fechaHora) {
         this.alias = alias;
         this.latitud = latitud;
         this.longitud = longitud;
         this.fechaHora = fechaHora;
-        this.precision = precision;
     }
 
-    public Localizacion(long id) {
-        this.id = id;
-    }
 
     public long getId() {
         return id;
@@ -89,14 +80,6 @@ public class Localizacion implements Serializable {
         this.fechaHora = fechaHora;
     }
 
-    public float getPrecision() {
-        return precision;
-    }
-
-    public void setPrecision(float precision) {
-        this.precision = precision;
-    }
-
     @Override
     public String toString() {
         return "Localizacion{" +
@@ -105,7 +88,6 @@ public class Localizacion implements Serializable {
                 ", latitud=" + latitud +
                 ", longitud=" + longitud +
                 ", fechaHora=" + fechaHora +
-                ", precision=" + precision +
                 '}';
     }
 }
