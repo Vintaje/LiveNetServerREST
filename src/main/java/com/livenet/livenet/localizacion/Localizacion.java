@@ -17,7 +17,7 @@ public class Localizacion implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id=0;
 
-    @Column(name = "alias", nullable = false,unique = true)
+    @Column(name = "alias", nullable = false, unique = true)
     private String alias;
 
     @Column(name = "latitud", nullable = false)

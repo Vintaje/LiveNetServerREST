@@ -46,7 +46,9 @@ public class UsuariosRESTController {
     public ResponseEntity<Usuario> findByAliasAndPasswd(@RequestBody LoginBody login) {
         // Buscamos el usuario por alias
         Usuario u = usuarioDao.findByAliasAndPasswd(login.getalias(), login.getpass());
+
         if (u != null) {
+            u.setPasswd("");
             return ResponseEntity.ok(u);
         } else {
             return ResponseEntity.noContent().build();

@@ -1,10 +1,13 @@
 package com.livenet.livenet.localizacion;
 
 
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,16 +28,6 @@ public class LocalizacionesRESTController {
     @Autowired
     private localizacionesDAO pd;
 
-    // Función de TEST
-
-    //@GetMapping
-    @RequestMapping(value = "prueba", method = RequestMethod.GET)
-    public String hola() {
-        return "Esto es una prueba";
-    }
-
-    //*** Comenzado los servicios rest
-
 
     /**
      * Lista todos las localizaciones. Protocolo GET
@@ -51,6 +44,18 @@ public class LocalizacionesRESTController {
         return ResponseEntity.ok(l);
     }
 
+    @RequestMapping(value = "locamigos", method = RequestMethod.POST)
+    public ResponseEntity<List<Localizacion>> findAllByAmigos(@RequestBody List<String> amigos) {
+        List<Localizacion> resultado = new ArrayList<>();
+        // Nos conectamos y realizamos el select
+        for (String amigo : amigos){
+            resultado.add(pd.findByAlias(amigo));
+        }
+        //List<Localizacion> l = pd.findAllByAlias(amigos);
+        // Devolvemos la ista de localizaciones
+        return ResponseEntity.ok(resultado);
+    }
+
     /**
      * Devuelve un localizacion dado su ID protocolo GET
      * GET: http://localhost:8080/localizaciones/{alias}
@@ -58,20 +63,6 @@ public class LocalizacionesRESTController {
      * @param alias ID del localizacion
      * @return Producto
      */
-/* // manera de buscar por alias poco eficiente ya que me traigo toda la lista de localiazciones
-        // por ahora solo lo puedo hacer así ya que no hay metodo fillbyString(), hay fill by id que recibe long.
-        Localizacion l = null;
-
-        for (int i = 0; i < lista.size(); i++) {
-            if (lista.get(i).getAlias().equals(alias))
-                l = lista.get(i);
-        }
-        if (l != null) {
-            return ResponseEntity.ok(l);
-        } else {
-            return ResponseEntity.noContent().build();
-        }*/
-
     //para @query poner value= y la select
     @RequestMapping(value = "localizaciones/{alias}", method = RequestMethod.GET)
     public ResponseEntity<Localizacion> findByAlias(@PathVariable("alias") String alias) {
@@ -96,59 +87,37 @@ public class LocalizacionesRESTController {
     @RequestMapping(value = "actualizarLoc", method = RequestMethod.PUT)
     public ResponseEntity<Localizacion> create(@RequestBody Localizacion localizacion) {
         // Creamos un nuevo localizacion a partir de los datos una vez insertado
-
-        Localizacion p = new Localizacion(localizacion.getAlias(), localizacion.getLatitud(), localizacion.getLongitud(), localizacion.getFechaHora());
+        localizacion.setFechaHora(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date()));
         //devolvemos el nuevo localizacion
-
-        return ResponseEntity.ok(pd.save(p));
+        Localizacion loc = pd.findByAlias(localizacion.getAlias());
+        if(loc != null){
+            loc.setLatitud(localizacion.getLatitud());
+            loc.setLongitud(localizacion.getLongitud());
+            loc.setFechaHora(localizacion.getFechaHora());
+            return ResponseEntity.ok(pd.save(loc));
+        }
+        return ResponseEntity.ok(pd.save(localizacion));
     }
 
     /**
      * Borra un localizacion de la base de datos. Protocolo DELETE
      * DELETE: http://localhost:8080/localizaciones/{alias}
      *
-     * @param alias, alias del localizacion a eliminar
+     * @param id, alias del localizacion a eliminar
      * @return
      */
-    @RequestMapping(value = "localizaciones/{alias}", method = RequestMethod.DELETE)
-    public ResponseEntity<Localizacion> delete(@PathVariable("alias") Long alias) {
+    @RequestMapping(value = "borrarloc/{alias}", method = RequestMethod.DELETE)
+    public ResponseEntity<Localizacion> delete(@PathVariable("alias") Long id) {
         // Buscamos el localizacion por alias
-        Optional<Localizacion> op = pd.findById(alias);
+        Optional<Localizacion> op = pd.findById(id);
         // si existe lo borramos y devolvemos
         if (op.isPresent()) {
             // Le pasamos los datos
-            Localizacion p = op.get();
-            pd.deleteById(alias);
-            return ResponseEntity.ok(p);
+            pd.deleteById(id);
+            return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.noContent().build();
         }
     }
-
-    @RequestMapping(value = "long/{longitud}", method = RequestMethod.GET)
-    public ResponseEntity<Localizacion> findByLongitud(@PathVariable("longitud") String longitud) {
-        Localizacion loc = pd.findByLongitud(Float.parseFloat(longitud));
-
-        if (loc != null) {
-            return ResponseEntity.ok(loc);
-        } else {
-            return ResponseEntity.noContent().build();
-        }
-    }
-
-
-    @RequestMapping(value = "fechahora/{fecha_hora}", method = RequestMethod.GET)
-    public ResponseEntity<Localizacion> findByFechaHora(@PathVariable("fecha_hora") String fecha_hora) {
-        // Buscamos el localizacion por alias
-        Localizacion loc = pd.findByFechaHora(fecha_hora);
-
-        if (loc != null) {
-            return ResponseEntity.ok(loc);
-        } else {
-            return ResponseEntity.noContent().build();
-        }
-
-    }
-
 
 }
