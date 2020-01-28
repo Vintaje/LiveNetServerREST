@@ -14,4 +14,5 @@ public interface localizacionesDAO extends JpaRepository<Localizacion, Long> {
     Localizacion findByLongitud(float longitud);
 
     Localizacion findByFechaHora(String fecha_hora);
+
 }

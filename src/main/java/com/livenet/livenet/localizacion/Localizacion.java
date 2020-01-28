@@ -14,8 +14,8 @@ public class Localizacion implements Serializable {
 
     //Necesarios
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id=0;
 
     @Column(name = "alias", nullable = false,unique = true)
     private String alias;
@@ -44,6 +44,13 @@ public class Localizacion implements Serializable {
 
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getAlias() {
         return alias;

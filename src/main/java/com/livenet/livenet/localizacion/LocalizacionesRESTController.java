@@ -93,12 +93,14 @@ public class LocalizacionesRESTController {
      * @param localizacion Producto a crear mendiante JSON
      * @return Producto creado si lo consigue
      */
-    @RequestMapping(value = "actualizarloc", method = RequestMethod.POST)
+    @RequestMapping(value = "actualizarLoc", method = RequestMethod.PUT)
     public ResponseEntity<Localizacion> create(@RequestBody Localizacion localizacion) {
         // Creamos un nuevo localizacion a partir de los datos una vez insertado
-        Localizacion p = pd.save(localizacion);
+
+        Localizacion p = new Localizacion(localizacion.getAlias(), localizacion.getLatitud(), localizacion.getLongitud(), localizacion.getFechaHora());
         //devolvemos el nuevo localizacion
-        return ResponseEntity.ok(p);
+
+        return ResponseEntity.ok(pd.save(p));
     }
 
     /**
@@ -124,7 +126,7 @@ public class LocalizacionesRESTController {
     }
 
     @RequestMapping(value = "long/{longitud}", method = RequestMethod.GET)
-    public ResponseEntity<Localizacion> findByLongitud(@PathVariable("longitud") String longitud){
+    public ResponseEntity<Localizacion> findByLongitud(@PathVariable("longitud") String longitud) {
         Localizacion loc = pd.findByLongitud(Float.parseFloat(longitud));
 
         if (loc != null) {
@@ -147,7 +149,6 @@ public class LocalizacionesRESTController {
         }
 
     }
-
 
 
 }
