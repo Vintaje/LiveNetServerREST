@@ -94,6 +94,7 @@ public class LocalizacionesRESTController {
             loc.setLatitud(localizacion.getLatitud());
             loc.setLongitud(localizacion.getLongitud());
             loc.setFechaHora(localizacion.getFechaHora());
+            loc.setAccuracy(localizacion.getAccuracy());
             return ResponseEntity.ok(pd.save(loc));
         }
         return ResponseEntity.ok(pd.save(localizacion));

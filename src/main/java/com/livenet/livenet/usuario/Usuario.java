@@ -1,9 +1,6 @@
 package com.livenet.livenet.usuario;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Clase pojo de usuario
@@ -15,7 +12,7 @@ import javax.persistence.Table;
 public class Usuario {
 
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @Column(name = "alias", nullable = false)
@@ -29,6 +26,9 @@ public class Usuario {
 
     @Column(name = "foto", nullable = false)
     private String foto;
+
+    @Column(name = "token", nullable = false)
+    private String token;
 
     public Usuario() {
     }
@@ -73,6 +73,14 @@ public class Usuario {
         this.foto = foto;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     @Override
     public String toString() {
         return "Usuario{" +
@@ -81,6 +89,7 @@ public class Usuario {
                 ", correo='" + correo + '\'' +
                 ", passwd='" + passwd + '\'' +
                 ", foto='" + foto + '\'' +
+                ", token='" + token + '\'' +
                 '}';
     }
 }

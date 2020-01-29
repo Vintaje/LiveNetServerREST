@@ -1,7 +1,21 @@
 package com.livenet.livenet.amigos;
 
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "amigos")
 public class Amigo {
-    private String alias1, alias2;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+
+    @Column(name = "alias_a")
+    private String alias1;
+
+    @Column(name = "alias_b")
+    private String alias2;
 
     public Amigo(){}
 
