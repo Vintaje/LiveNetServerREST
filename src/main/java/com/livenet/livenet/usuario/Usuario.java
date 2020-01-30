@@ -24,6 +24,7 @@ public class Usuario {
     @Column(name = "passwd", nullable = false)
     private String passwd;
 
+    @Lob
     @Column(name = "foto", nullable = false)
     private String foto;
 

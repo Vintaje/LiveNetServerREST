@@ -9,6 +9,7 @@ public interface amigosDAO extends JpaRepository<Amigo, Long> {
 
     List<Amigo> findAllByAlias1OrAlias2(String alias1, String alias2);
 
+    Amigo deleteAmigoByAlias1AndAlias2(String alias1, String alias2);
 
     Amigo findByAlias1AndAlias2(String amigo, String amigo1);
 }

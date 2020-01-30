@@ -55,4 +55,19 @@ public class AmigosRESTController {
         return ResponseEntity.ok("ok google");
     }
 
+    @RequestMapping(value="borraramigo/", method = RequestMethod.GET)
+    public ResponseEntity<String> borraramigo(@RequestBody String[] amigos){
+
+        Amigo resultado = pd.findByAlias1AndAlias2(amigos[0], amigos[1]);
+        Amigo resultado2 = pd.findByAlias1AndAlias2(amigos[1],amigos[0]);
+        if(resultado != null){
+            Amigo borrado = pd.deleteAmigoByAlias1AndAlias2(amigos[0],amigos[1]);
+        }else if(resultado2 != null){
+            Amigo borrado = pd.deleteAmigoByAlias1AndAlias2(amigos[1], amigos[0]);
+        }else{
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok("Borrado");
+    }
+
 }

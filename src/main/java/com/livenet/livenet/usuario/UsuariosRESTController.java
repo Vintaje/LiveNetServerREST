@@ -95,8 +95,9 @@ public class UsuariosRESTController {
         Optional<Usuario> op = Optional.ofNullable(usuarioDao.findByAlias(alias));
         // Devolvemos el usuario si existe.
         if (op.isPresent()) {
-            // Le pasamos los datos
+            // Le pasamos los datos #### Solo vamos a actualizar la foto
             Usuario us = op.get();
+            us.setFoto(u.getFoto());
             usuarioDao.save(us);
             return ResponseEntity.ok(us);
         } else {
