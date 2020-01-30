@@ -55,7 +55,7 @@ public class AmigosRESTController {
         return ResponseEntity.ok("ok google");
     }
 
-    @RequestMapping(value="borraramigo/", method = RequestMethod.DELETE)
+    @RequestMapping(value="borraramigo/", method = RequestMethod.POST)
     public ResponseEntity<String> borraramigo(@RequestBody String[] amigos){
 
         Amigo resultado = pd.findByAlias1AndAlias2(amigos[0], amigos[1]);
