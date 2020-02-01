@@ -49,7 +49,8 @@ public class LocalizacionesRESTController {
         List<Localizacion> resultado = new ArrayList<>();
         // Nos conectamos y realizamos el select
         for (String amigo : amigos) {
-            resultado.add(pd.findByAlias(amigo));
+            Localizacion loc = pd.findByAlias(amigo);
+            resultado.add(loc);
         }
         //List<Localizacion> l = pd.findAllByAlias(amigos);
         // Devolvemos la ista de localizaciones
@@ -87,13 +88,13 @@ public class LocalizacionesRESTController {
     @RequestMapping(value = "actualizarLoc", method = RequestMethod.PUT)
     public ResponseEntity<Localizacion> create(@RequestBody Localizacion localizacion) {
         // Creamos un nuevo localizacion a partir de los datos una vez insertado
-        localizacion.setFechaHora(new java.util.Date());
+        System.out.println(localizacion);
         //devolvemos el nuevo localizacion
         Localizacion loc = pd.findByAlias(localizacion.getAlias());
         if (loc != null) {
             loc.setLatitud(localizacion.getLatitud());
             loc.setLongitud(localizacion.getLongitud());
-            loc.setFechaHora(localizacion.getFechaHora());
+            loc.setFecha_hora(localizacion.getFecha_hora());
             loc.setAccuracy(localizacion.getAccuracy());
             return ResponseEntity.ok(pd.save(loc));
         }

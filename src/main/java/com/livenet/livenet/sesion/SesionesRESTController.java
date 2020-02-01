@@ -3,6 +3,7 @@ package com.livenet.livenet.sesion;
 import com.livenet.livenet.localizacion.Localizacion;
 import com.livenet.livenet.usuario.Usuario;
 import com.livenet.livenet.usuario.usuariosDAO;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,14 +17,26 @@ public class SesionesRESTController {
 
     @Autowired
     private sesionesDAO pd;
-    private usuariosDAO ud;
 
-    @RequestMapping(value="sesion/{alias}", method = RequestMethod.GET)
-    public ResponseEntity<Usuario> findByAlias(@PathVariable("alias") String alias){
-        Usuario s = ud.findByAlias(alias);
+
+    //Codigo para las sesiones:
+    //121 OK -> Inicia
+    //323 Ok pero ha expirado
+    @RequestMapping(value="sesion/{token}", method = RequestMethod.GET)
+    public ResponseEntity<Integer> findByToken(@PathVariable("token") String token){
+        Sesion s = pd.findByToken(token);
 
         if (s != null) {
-            return ResponseEntity.ok(s);
+            int code;
+            if(s.getLoggedout() >  System.currentTimeMillis()) {
+                code = 121;
+                s.setLoggedin(System.currentTimeMillis());
+                pd.save(s);
+            }else{
+                code = 323;
+                borrarSesion(token);
+            }
+            return ResponseEntity.ok(code);
         } else {
             return ResponseEntity.noContent().build();
         }
@@ -31,24 +44,29 @@ public class SesionesRESTController {
 
     @RequestMapping(value = "insertsesion", method = RequestMethod.POST)
     public ResponseEntity<Sesion> create(@RequestBody Sesion sesion){
-        Sesion s = pd.save(sesion);
-
-        return ResponseEntity.ok(s);
+        String alias = sesion.getAlias();
+        sesion.setAlias(alias);
+        Sesion actual = pd.findByAlias(alias);
+        if(actual != null){
+            actual.setToken(sesion.getToken());
+            actual.setLoggedin(sesion.getLoggedin());
+            actual.setLoggedin(sesion.getLoggedout()+259200000);
+            pd.save(actual);
+        }else {
+            sesion.setLoggedout(sesion.getLoggedin()+259200000);
+            actual = pd.save(sesion);
+        }
+        return ResponseEntity.ok(actual);
     }
 
 
-    @RequestMapping(value = "cerrarsesion/{alias}", method = RequestMethod.DELETE)
-    public ResponseEntity<Sesion> delete(@PathVariable("alias") Long alias) {
+    @RequestMapping(value = "cerrarsesion/{token}", method = RequestMethod.GET)
+    public ResponseEntity<String> borrarSesion(@PathVariable("token") String token) {
         // Buscamos el localizacion por alias
-        Optional<Sesion> op = pd.findById(alias);
-        // si existe lo borramos y devolvemos
-        if (op.isPresent()) {
-            // Le pasamos los datos
-            Sesion s = op.get();
-            pd.deleteById(alias);
-            return ResponseEntity.ok(s);
-        } else {
-            return ResponseEntity.noContent().build();
-        }
+            String tok = token;
+            Sesion s = pd.findByToken(token);
+
+            pd.delete(s);
+            return ResponseEntity.ok().build();
     }
 }

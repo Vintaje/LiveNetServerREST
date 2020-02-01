@@ -23,20 +23,23 @@ public class AmigosRESTController {
 
     @RequestMapping(value="amigos/{alias}", method = RequestMethod.GET)
     public ResponseEntity<ArrayList<String[]>> findAllByAlias(@PathVariable("alias") String alias){
-        ArrayList<String[]> users = new ArrayList<String[]>();
+        ArrayList<String[]> users = new ArrayList<>();
         List<Amigo> rest = pd.findAllByAlias1OrAlias2(alias,alias);
+        try {
+            for (Amigo a : rest) {
+                if (a.getAlias1().equals(alias)) {
+                    Usuario user = ud.findByAlias(a.getAlias2());
+                    users.add(new String[]{a.getAlias2(), user.getFoto(), user.getToken()});
 
-        for(Amigo a : rest){
-            if(a.getAlias1().equals(alias)){
+                } else if (a.getAlias2().equals(alias)) {
+                    Usuario user = ud.findByAlias(a.getAlias1());
+                    users.add(new String[]{a.getAlias1(), user.getFoto(), user.getToken()});
 
-                Usuario user = ud.findByAlias(a.getAlias2());
-                users.add(new String[]{a.getAlias2(), user.getFoto(), user.getToken()});
-            }else if(a.getAlias2().equals(alias)){
-                Usuario user = ud.findByAlias(a.getAlias1());
-                users.add(new String[]{a.getAlias1(), user.getFoto(), user.getToken()});
+                }
 
             }
-
+        }catch(Exception ex){
+            ex.printStackTrace();
         }
 
         return ResponseEntity.ok(users);

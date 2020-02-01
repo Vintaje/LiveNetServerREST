@@ -28,7 +28,7 @@ public class Localizacion implements Serializable {
     private float longitud;
 
     @Column(name = "fecha_hora", nullable = false)
-    private Date fechaHora;
+    private String fecha_hora;
 
     @Column(name = "accuracy", nullable = false)
     private float accuracy;
@@ -68,12 +68,12 @@ public class Localizacion implements Serializable {
         this.longitud = longitud;
     }
 
-    public Date getFechaHora() {
-        return fechaHora;
+    public String getFecha_hora() {
+        return fecha_hora;
     }
 
-    public void setFechaHora(Date fechaHora) {
-        this.fechaHora = fechaHora;
+    public void setFecha_hora(String fecha_hora) {
+        this.fecha_hora = fecha_hora;
     }
 
     public float getAccuracy() {
@@ -91,7 +91,7 @@ public class Localizacion implements Serializable {
                 ", alias='" + alias + '\'' +
                 ", latitud=" + latitud +
                 ", longitud=" + longitud +
-                ", fechaHora=" + fechaHora +
+                ", fechaHora=" + fecha_hora +
                 ", accuracy=" + accuracy +
                 '}';
     }
